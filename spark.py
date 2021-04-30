@@ -28,7 +28,7 @@ es_write_conf = {
 "es.port" : '9200',
 
 # specify a resource in the form 'index/doc-type'
-"es.resource" : 'twitter/tweets',
+"es.resource" : 'twitter2/tweets',
 
 # is the input JSON?
 "es.input.json" : "yes",
@@ -57,7 +57,7 @@ lines = ssc.socketTextStream('127.0.0.3', 5555)
 #This 'lines' DStream represents the stream of data that will be received from the data server.
 #Each record in this DStream is a line of text.
 
-idd = 0
+
 
 #target = io.open("sentiment.txt", 'w', encoding='utf-8')
 def sentiment_score(chat):
@@ -69,18 +69,20 @@ def sentiment_score(chat):
 
 
 
-lines = lines.map(lambda line: {'doc_id': idd, 'tweet': line, 'sentiment score': sentiment_score(line)})#(sentiment_score(line), line))
+lines = lines.map(lambda line: {'tweet': line, 'sentiment score': sentiment_score(line)})#(sentiment_score(line), line))
 
 # Print the first ten elements of each RDD generated in this DStream to the console
 lines.pprint()
 
 print("LINES --------------------")
 
-
+idd = 0
 
 def foo(rdd):
 	def format_data(data):
-	    return (data['doc_id'], json.dumps(data))
+	    global idd
+	    idd += 1
+	    return (idd, json.dumps(data))
 
 	rdd = rdd.map(lambda x: format_data(x))
 	print(rdd.collect())
@@ -99,9 +101,6 @@ lines.foreachRDD(foo)
 ssc.start()             # Start the computation
 print('START ++++++++++++++++++++++')
 
-
 ssc.awaitTermination()  # Wait for the computation to terminate
-
-
 
 print('TERMINATION TTT')
