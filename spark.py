@@ -61,8 +61,8 @@ lines = ssc.socketTextStream('127.0.0.3', 5555)
 
 #target = io.open("sentiment.txt", 'w', encoding='utf-8')
 def sentiment_score(chat):
-    chat = re.sub("(?:(https|http)\s?:\/\/)(\s)*(www\.)?(\s)*((\w|\s)+\.)*([\w\-\s]+\/)*([\w\-]+)((\?)?[\w\s]*=\s*[\w\%&]*)*", " ", chat)
-    chat = re.sub("[^A-Za-z]", " ", chat)
+    #chat = re.sub("(?:(https|http)\s?:\/\/)(\s)*(www\.)?(\s)*((\w|\s)+\.)*([\w\-\s]+\/)*([\w\-]+)((\?)?[\w\s]*=\s*[\w\%&]*)*", " ", chat)
+    #chat = re.sub("[^A-Za-z]", " ", chat)
 
     return TextBlob(chat).sentiment.polarity
 
